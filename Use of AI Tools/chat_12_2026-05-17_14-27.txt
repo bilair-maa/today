@@ -1,0 +1,107 @@
+Claude Agent Conversation — 2026-05-17_14-27
+==================================================
+
+==================================================
+USER
+==================================================
+simplify the image for the theme in settings, change todai to today.
+
+can you also add a feature as to allow the user to choose when there day starts/ends. it has to be 24 hours. i just mean a feature that lets "today" be defined by 24 hours rather than midnight. what i mean is some people wake up later or smething, or sleep later. there day doesnt end till 3am or starts later, and people dont really define the day ending at midnight but after they sleep.
+
+
+==================================================
+CLAUDE
+==================================================
+I'll read the relevant files to understand the current state before making changes.
+
+
+==================================================
+CLAUDE
+==================================================
+Let me find the actual file paths.
+
+
+==================================================
+CLAUDE
+==================================================
+Now I have a full picture of the codebase. I'll make three changes: simplify the theme preview cards, rename "Todai" to "Today" in the UI, and add a custom day-start-hour setting. Let me implement all of these.
+
+
+==================================================
+CLAUDE
+==================================================
+Starting with simplifying the theme preview cards. I'll replace the mini-app mockup with a cleaner, simpler color swatch.
+
+
+==================================================
+CLAUDE
+==================================================
+Now renaming "Todai" to "Today" in the settings back button.
+
+
+==================================================
+CLAUDE
+==================================================
+Let me also check if there are other "Todai"/"todai" references in UI-visible text across other view files.
+
+
+==================================================
+CLAUDE
+==================================================
+Found "Todai is open." in EmptyStateView. Let me update that too.
+
+
+==================================================
+CLAUDE
+==================================================
+Now adding the `dayStartHour` property to `AppSettings` in Theme.swift.
+
+
+==================================================
+CLAUDE
+==================================================
+Now updating DateHelpers to accept the day start offset. The key idea: subtracting `dayStartHour` hours from the current time shifts the day boundary so that, for example, 2 AM with a 3 AM start still counts as "yesterday."
+
+
+==================================================
+CLAUDE
+==================================================
+Now threading `dayStartHour` through TaskStore and TaskViewModel.
+
+
+==================================================
+CLAUDE
+==================================================
+Now updating ContentView to pass `dayStartHour` and use the adjusted date for display.
+
+
+==================================================
+CLAUDE
+==================================================
+Now adding the "Day Starts At" section to SettingsView with a clean hour picker.
+
+
+==================================================
+CLAUDE
+==================================================
+Now I'll add the `dayStartSection` and its helper right before the closing brace of the struct.
+
+
+==================================================
+CLAUDE
+==================================================
+All changes are in place. Let me build to verify everything compiles.
+
+
+==================================================
+CLAUDE
+==================================================
+Build succeeded. Here's a summary of all changes:
+
+1. **Simplified theme previews** in Settings — replaced the detailed mini-app mockup (date, progress text, task rows with circles) with a clean color swatch card showing just a dot and two bars in the theme's colors.
+
+2. **Renamed "Todai" to "Today"** in two places — the Settings back button and the "Today is open." empty state text.
+
+3. **Added "Day Starts At" setting** — a new section in Settings with +/- buttons to pick any hour (12:00 AM through 11:00 PM). This shifts the day boundary so tasks persist until your chosen hour. For example, setting it to 3:00 AM means your "today" doesn't reset until 3 AM. The adjusted time flows through to:
+   - The date/day-of-week display on the main screen
+   - The day validation logic that clears yesterday's tasks

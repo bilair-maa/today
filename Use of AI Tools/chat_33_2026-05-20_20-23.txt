@@ -1,0 +1,81 @@
+Claude Agent Conversation — 2026-05-20_20-23
+==================================================
+
+==================================================
+USER
+==================================================
+1. SettingsView is calling NotificationService directly
+The notifications toggle in Settings is reaching straight into the notification service to request permission and cancel notifications. That's the view model's job. Add enable and disable notifications methods to TaskViewModel, give SettingsView a reference to the view model, and have the toggle call those instead.
+
+2. Duplicate priority section in AddTaskView
+There are two priority picker sections that are completely identical. Delete the collapsed one and use the regular one in both places.
+
+
+==================================================
+CLAUDE
+==================================================
+I'll start by reading the relevant files to understand the current code.
+
+
+==================================================
+CLAUDE
+==================================================
+Let me use the Xcode tools to read these files.
+
+
+==================================================
+CLAUDE
+==================================================
+Let me read the rest of AddTaskView to find the collapsed priority section.
+
+
+==================================================
+CLAUDE
+==================================================
+Now I need to see how `SettingsView` is presented to know how to pass the view model to it.
+
+
+==================================================
+CLAUDE
+==================================================
+I have a clear picture of both issues. Let me find the filesystem paths and make all the changes.
+
+
+==================================================
+CLAUDE
+==================================================
+Now I'll make all the edits. Starting with adding the notification methods to `TaskViewModel`, then updating `SettingsView` to accept the view model, updating `ContentView` to pass it, and removing the duplicate priority section from `AddTaskView`.
+
+
+==================================================
+CLAUDE
+==================================================
+Need to read the filesystem versions of these files first.
+
+
+==================================================
+CLAUDE
+==================================================
+Good, now I can make all the remaining edits.
+
+
+==================================================
+CLAUDE
+==================================================
+Now let me verify the changes compile by checking diagnostics on the modified files.
+
+
+==================================================
+CLAUDE
+==================================================
+All four files compile clean. Here's what changed:
+
+**1. Notification toggle routed through TaskViewModel:**
+- Added `enableNotifications() async -> Bool` and `disableNotifications()` methods to `TaskViewModel` — they delegate to `NotificationService.shared` so the view never touches the service directly.
+- `SettingsView` now takes an `@ObservedObject var viewModel: TaskViewModel` parameter and its toggle calls those new methods instead of `NotificationService.shared`.
+- `ContentView` passes `viewModel` when presenting `SettingsView`.
+
+**2. Duplicate priority section removed from AddTaskView:**
+- Deleted `collapsedPrioritySection` (was identical to `prioritySection`).
+- The collapsed state now uses `prioritySection` directly.
+

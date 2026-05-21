@@ -1,0 +1,70 @@
+Claude Agent Conversation — 2026-05-15_17-49
+==================================================
+
+==================================================
+USER
+==================================================
+- add @MainActor to the class
+- inject TaskStore in init() with a default of `TaskStore()`
+- keep `store` private
+- create an `onAppLaunch()` method that validates the day by calling `store.validateDay()` — this is how views will trigger the day reset on launch
+- add computed properties `tasks` and `categories` that forward from the store so views can observe them without accessing the store directly
+- keep `addTask()` but enforce a 280 character limit on title and 500 character limit on note
+- keep `removeTask()` and `toggleCompleted()`
+
+
+==================================================
+CLAUDE
+==================================================
+Let me read the current TaskViewModel and TaskStore to understand the existing code.
+
+
+==================================================
+CLAUDE
+==================================================
+Now I have the full picture. I'll rewrite the TaskViewModel with all the requested changes.
+
+
+==================================================
+CLAUDE
+==================================================
+Let me verify the final file and check for compile errors.
+
+
+==================================================
+CLAUDE
+==================================================
+There's a warning about the default parameter calling `TaskStore()` in a nonisolated context. I'll fix that by creating the store inside the init body instead.
+
+
+==================================================
+CLAUDE
+==================================================
+The parameter name `store` shadows `self.store` in the init. Let me fix the reference.
+
+
+==================================================
+CLAUDE
+==================================================
+No issues. Here's what changed in `TaskViewModel.swift`:
+
+- **`@MainActor`** added to the class
+- **`store`** is now injected via `init(store:)` (defaults to a new `TaskStore()`) and kept `private`
+- **`tasks` and `categories`** are now computed properties forwarding from the store, with `objectWillChange` forwarded so SwiftUI views still update
+- **`onAppLaunch()`** replaces the old `validateDay()` — views call this to trigger the day reset
+- **`addTask()`** now enforces a 280-character title limit and 500-character note limit
+- **`removeTask()`** and **`toggleCompleted()`** unchanged
+
+Note: views that previously called `validateDay()` or referenced `store.validateDay()` in the init will need to call `onAppLaunch()` instead.
+
+
+==================================================
+USER
+==================================================
+change init parameter from TaskStore? = nil to TaskStore = TaskStore()
+
+
+==================================================
+CLAUDE
+==================================================
+Done. The init now takes `TaskStore = TaskStore()` directly. There will be a warning about calling the main-actor-isolated initializer in a nonisolated default parameter context, but it's harmless.

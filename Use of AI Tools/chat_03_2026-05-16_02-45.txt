@@ -1,0 +1,25 @@
+Claude Agent Conversation — 2026-05-16_02-45
+==================================================
+
+==================================================
+USER
+==================================================
+when all tasks are checked, there still needs to be the option to add more tasks
+
+
+==================================================
+CLAUDE
+==================================================
+Let me look at the current views to understand how completion state and task adding work.
+
+
+==================================================
+CLAUDE
+==================================================
+The add button is hidden when all tasks are done (line 48: `if !allDone`). I'll remove that condition so it's always visible.
+
+
+==================================================
+CLAUDE
+==================================================
+The add button will now always be visible, including on the "all done" screen, so users can still add more tasks after completing everything.

@@ -1,0 +1,52 @@
+Claude Agent Conversation — 2026-05-20_17-28
+==================================================
+
+==================================================
+USER
+==================================================
+After the on boarding, there's a sudden gap between welcome to a new day and the on boarding where the task view pops up and disappears and then welcome to a new day comes. That's weird. It needs to be smooth. It shouldn't it show the task view before welcome to a new day.
+
+
+==================================================
+CLAUDE
+==================================================
+Let me look at the relevant view files to understand the transition flow.
+
+
+==================================================
+CLAUDE
+==================================================
+I see the issue. Here's what's happening: when onboarding finishes, `finishOnboarding()` fades `bgOpacity` to 0 over 0.4 seconds, which reveals the ContentView (task view) underneath. Then after 0.45s, `onComplete` fires, which shows the welcome view. During that fade, the task view is briefly visible.
+
+The fix: when the welcome view is coming next, keep the onboarding background opaque so the task view never peeks through.
+
+
+==================================================
+CLAUDE
+==================================================
+Now update ContentView to pass `keepBackground: true` when the welcome view will be shown next.
+
+
+==================================================
+CLAUDE
+==================================================
+Now let me verify both files look correct.
+
+
+==================================================
+CLAUDE
+==================================================
+Let me validate the changes compile correctly.
+
+
+==================================================
+CLAUDE
+==================================================
+No compiler issues. Here's what I changed:
+
+1. **OnboardingView** — Added a `keepBackground` parameter. When `true`, `finishOnboarding()` skips fading `bgOpacity` to 0, so the opaque background stays in place during the exit animation.
+
+2. **ContentView** — Passes `keepBackground: settings.shouldShowNewDayWelcome` to the onboarding. Also moved `showingOnboarding = false` to *after* `showingWelcome = true` so both state changes happen together in the same render cycle.
+
+The result: when the welcome view is coming next, the onboarding background stays opaque while the content fades out, then SwiftUI atomically swaps in the welcome view and removes the onboarding — no flash of the task view in between.
+
