@@ -1,13 +1,5 @@
 # Today: Take-Home Submission
 
-echo "# today" >> README.md
-git init
-git add README.md
-git commit -m "first commit"
-git branch -M main
-git remote add origin https://github.com/bilair-maa/today.git
-git push -u origin main
-
 ## Overall Approach
 
 Before opening any tools, I read the spec with attention to both the technical requirements and the overall product concept. The core constraint, that the app only cares about today, pointed toward a specific kind of user: someone dealing with anxiety, ADHD, or the kind of overwhelm that comes from a task list that grows increasingly faster. That read on the target user informed every product and technical decision that followed.
